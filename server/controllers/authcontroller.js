@@ -15,7 +15,7 @@ exports.register = async (req,res)=>{
               password: hashedPassword
             });
         const token = generateToken(user._id,user.role);
-        res.status(201).json({message:"registraion success",token});
+        res.status(201).json({message:"registraion success",token,user});
         
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
     if (!match) return res.status(400).json({ message: "password is incorrect" });
 
     const token = generateToken(user._id,user.role);
-    res.status(201).json({ message: "login successful",token });
+    res.status(201).json({ message: "login successful",token,user});
   } catch (error) {
     res.status(500).json({ message: "server error" });
   }

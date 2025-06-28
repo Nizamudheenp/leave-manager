@@ -14,9 +14,10 @@ exports.authMiddleware = (req, res, next) => {
     }
 }
 
-exports.adminOnly = (req, res) => {
+exports.adminOnly = (req, res,next) => {
    if(req.role !== "admin"){
     return res.status(403).json({ message: 'access denied.admin only.'});
    }
+   next()
 
 }

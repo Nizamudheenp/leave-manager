@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import {Link, useNavigate} from 'react-router-dom';
-import API from '../config/api';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../redux/slices/authSlice';
+import api from '../config/api';
 
 const Register = () => {
   const [formData,setFormData]=useState({
@@ -18,12 +18,12 @@ const Register = () => {
   const handleSubmit = async (e)=>{
     e.preventDefault();
     try {
-      const response = await API.post('/auth/register',formData);
-      dispatch(setUser({user:response.data.user,token: res.data.token}));
+      const response = await api.post('/auth/register',formData);
+      dispatch(setUser({user:response.data.user,token: response.data.token}));
       navigate('/userDashboard');
     } catch (error) {
       alert("Registration failed");
-      console.log(error);
+      console.log(error.message);
     }
   }
 
@@ -50,7 +50,7 @@ const Register = () => {
          className="mb-3 w-full p-2 border rounded"  
          />
          <input
-         type="text"
+         type='password'
          name="password" 
          placeholder='Password'
          onChange={handleChange}

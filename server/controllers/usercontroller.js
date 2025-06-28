@@ -1,4 +1,5 @@
 const Leave = require('../models/LeaveModel');
+const sendEmail = require('../utils/email');
 
 exports.createLeave = async (req, res) => {
     const { fromDate, toDate, type, reason } = req.body;
@@ -18,7 +19,22 @@ exports.createLeave = async (req, res) => {
             type,
             reason,
             status: "Pending"
-        })
+        });
+
+        await sendEmail({
+            to: process.env.TO_EMAIL,
+            subject: "New Leave Request Submitted",
+            text: `A new leave request has been submitted.`,
+            html: `
+        <h2>New Leave Request</h2>
+        <p><strong>Type:</strong> ${type}</p>
+        <p><strong>From:</strong> ${from.toDateString()}</p>
+        <p><strong>To:</strong> ${to.toDateString()}</p>
+        <p><strong>Reason:</strong> ${reason}</p>
+        <p><strong>Days:</strong> ${leaveDays}</p>
+      `
+        });
+        
         return res.status(201).json({
             message: "Leave applied successfully",
             leave: {
@@ -37,7 +53,7 @@ exports.createLeave = async (req, res) => {
 
 exports.myLeave = async (req, res) => {
     try {
-        const myLeave = await Leave.find({ employeeId: req.userId }).sort({createdAt: -1});
+        const myLeave = await Leave.find({ employeeId: req.userId }).sort({ createdAt: -1 });
         res.status(200).json({ myLeave })
     } catch (error) {
         res.status(500).json({ message: 'server error while getting leave', error })
@@ -53,7 +69,7 @@ exports.cancelLeave = async (req, res) => {
             return res.status(404).json({ message: "Leave not found" });
         }
         if (leave.status !== "Pending") {
-            return res.status(400).json({ message:"only pending leaves can be cancelled" });
+            return res.status(400).json({ message: "only pending leaves can be cancelled" });
         }
         await Leave.findByIdAndDelete(leaveId);
         res.json({ message: "leave cancelled successfully" });
