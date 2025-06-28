@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { UserIcon, ArrowRightEndOnRectangleIcon  } from '@heroicons/react/24/solid'; // heroicons
+import { Link, useNavigate } from 'react-router-dom';
+import { UserIcon, ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/solid';
 
 
 const Navbar = () => {
@@ -24,14 +24,15 @@ const Navbar = () => {
                     <UserIcon className="h-5 w-5 text-white" />
                     <span>{user?.name}</span>
                 </div>
-
-                <button
+                {!user ? (<Link to='/login' className="flex items-center gap-1 bg-white text-purple-700 font-semibold px-3 py-1 rounded hover:bg-purple-100">Login</Link>) : (<button
                     onClick={handleLogout}
                     className="flex items-center gap-1 bg-white text-purple-700 font-semibold px-3 py-1 rounded hover:bg-purple-100"
                 >
                     <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
                     Logout
-                </button>
+                </button>)}
+
+
             </div>
         </nav>
     );

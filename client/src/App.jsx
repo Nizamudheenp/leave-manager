@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import EmployeeDashboard from "./pages/EmployeeDashboard"
 import AdminDashboard from "./pages/AdminDashboard"
 import Navbar from "./components/Navbar"
+import HomePage from "./pages/HomePage"
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
     <Navbar />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 

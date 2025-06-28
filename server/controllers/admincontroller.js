@@ -1,4 +1,6 @@
 const Leave = require('../models/LeaveModel');
+const sendEmail = require('../utils/email');
+require('dotenv').config();
 
 exports.getAllLeaves = async (req, res) => {
     try {
@@ -25,9 +27,10 @@ exports.updateStatus = async (req, res) => {
         if (!updatedLeave) {
             return res.status(404).json({ message: "Leave not found" });
         }
-        
+        try {
+
             await sendEmail({
-                to: process.env.TO_EMAIL,
+                to: process.env.EMAIL_TO,
                 subject: `Your Leave Request has been ${status}`,
                 text: `Your leave from ${new Date(updatedLeave.fromDate).toDateString()} to ${new Date(updatedLeave.toDate).toDateString()} has been ${status}.`,
                 html: `
@@ -40,6 +43,12 @@ exports.updateStatus = async (req, res) => {
     <p><strong>Reason:</strong> ${updatedLeave.reason}</p>
   `
             });
+
+        } catch (emailErr) {
+            console.error("Email failed:", emailErr.message);
+        }
+
+
 
         res.json({ message: "status updated", leave: updatedLeave });
     } catch (error) {

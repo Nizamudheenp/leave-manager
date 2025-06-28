@@ -1,5 +1,6 @@
 const Leave = require('../models/LeaveModel');
 const sendEmail = require('../utils/email');
+require('dotenv').config();
 
 exports.createLeave = async (req, res) => {
     const { fromDate, toDate, type, reason } = req.body;
@@ -11,21 +12,22 @@ exports.createLeave = async (req, res) => {
 
     const leaveDays = Math.floor((to - from) / (1000 * 60 * 60 * 24)) + 1;
 
-    try {
-        const newLeave = await Leave.create({
-            employeeId: req.userId,
-            fromDate: from,
-            toDate: to,
-            type,
-            reason,
-            status: "Pending"
-        });
+   try {
+  const newLeave = await Leave.create({
+    employeeId: req.userId,
+    fromDate: from,
+    toDate: to,
+    type,
+    reason,
+    status: "Pending"
+  });
 
-        await sendEmail({
-            to: process.env.TO_EMAIL,
-            subject: "New Leave Request Submitted",
-            text: `A new leave request has been submitted.`,
-            html: `
+  try {
+    await sendEmail({
+      to: process.env.EMAIL_TO,
+      subject: "New Leave Request Submitted",
+      text: `A new leave request has been submitted.`,
+      html: `
         <h2>New Leave Request</h2>
         <p><strong>Type:</strong> ${type}</p>
         <p><strong>From:</strong> ${from.toDateString()}</p>
@@ -33,22 +35,26 @@ exports.createLeave = async (req, res) => {
         <p><strong>Reason:</strong> ${reason}</p>
         <p><strong>Days:</strong> ${leaveDays}</p>
       `
-        });
-        
-        return res.status(201).json({
-            message: "Leave applied successfully",
-            leave: {
-                fromDate: from.toDateString(),
-                toDate: to.toDateString(),
-                leaveDays,
-                type,
-                reason,
-                status: "Pending"
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'server error while creating leave', error })
+    });
+  } catch (emailErr) {
+    console.error("Email failed:", emailErr.message);
+  }
+
+  return res.status(201).json({
+    message: "Leave applied successfully",
+    leave: {
+      fromDate: from.toDateString(),
+      toDate: to.toDateString(),
+      leaveDays,
+      type,
+      reason,
+      status: "Pending"
     }
+  });
+} catch (error) {
+  console.error("Create Leave Error:", error.message);
+  res.status(500).json({ message: "Server error while creating leave", error });
+}
 }
 
 exports.myLeave = async (req, res) => {
