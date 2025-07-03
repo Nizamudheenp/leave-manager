@@ -6,7 +6,7 @@ import EmployeeDashboard from "./pages/EmployeeDashboard"
 import AdminDashboard from "./pages/AdminDashboard"
 import Navbar from "./components/Navbar"
 import HomePage from "./pages/HomePage"
-
+import {Toaster} from 'sonner';
 
 function App() {
 
@@ -14,6 +14,7 @@ function App() {
     <>
     <BrowserRouter>
     <Navbar />
+    <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />

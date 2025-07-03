@@ -4,6 +4,7 @@ import api from '../config/api';
 import { removeLeave, setLeaves } from '../redux/slices/leaveSlice';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { toast } from 'sonner';
 
 const MyLeave = () => {
   const { token } = useSelector((state) => state.auth);
@@ -34,9 +35,9 @@ const MyLeave = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       dispatch(removeLeave(leaveId));
-      alert('Leave request cancelled');
+      toast('Leave request cancelled');
     } catch (error) {
-      alert('Failed to cancel leave.');
+      toast.error('Failed to cancel leave.');
       console.log(error);
     }
   };

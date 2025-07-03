@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../config/api';
+import { toast } from 'sonner';
 
 const AdminLeaves = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
@@ -49,10 +50,10 @@ const AdminLeaves = () => {
           leave._id === id ? { ...leave, status: action } : leave
         )
       );
-      alert(`Leave ${action}`);
+      toast(`Leave ${action}`);
     } catch (error) {
       console.log(error);
-      alert('Action failed');
+      toast.error('Action failed');
     }
   };
 

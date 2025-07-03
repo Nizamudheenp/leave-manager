@@ -4,13 +4,13 @@ import ApplyLeave from '../components/ApplyLeave';
 
 const EmployeeDashboard = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-7 px-3">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-blue-700 mb-12">
+        <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
           Employee Dashboard
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1  lg:grid-cols-2 gap-10">
           <div className="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500">
             <h2 className="text-2xl font-semibold text-blue-600 mb-6">Apply for Leave</h2>
             <ApplyLeave />

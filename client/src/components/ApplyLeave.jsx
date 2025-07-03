@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import api from '../config/api';
 import { addLeave } from '../redux/slices/leaveSlice';
+import { toast } from 'sonner';
 
 const ApplyLeave = () => {
     const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const ApplyLeave = () => {
            const response =  await api.post('/user/leave', formData,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            alert('leave applied successfully');
+            toast.success('leave applied successfully');
             dispatch(addLeave(response.data.leave));
             setFormData({
                 fromDate: "",
@@ -31,11 +32,12 @@ const ApplyLeave = () => {
                 reason: ""
             })
         } catch (error) {
-            alert('leave application failed');
+            toast.error('leave application failed');
             console.log(error);
 
         }
     }
+
     return (
         <form
       onSubmit={handleSubmit}

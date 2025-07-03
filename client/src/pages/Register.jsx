@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../redux/slices/authSlice';
 import api from '../config/api';
+import { toast } from 'sonner';
 
 const Register = () => {
   const [formData,setFormData]=useState({
@@ -20,9 +21,10 @@ const Register = () => {
     try {
       const response = await api.post('/auth/register',formData);
       dispatch(setUser({user:response.data.user,token: response.data.token}));
-      navigate('/userDashboard');
+      toast.success("registration successful!");
+      navigate('/employee-Dashboard');
     } catch (error) {
-      alert("Registration failed");
+      toast.error("Registration failed");
       console.log(error.message);
     }
   }

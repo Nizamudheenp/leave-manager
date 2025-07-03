@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/slices/authSlice';
 import api from '../config/api';
+import { toast } from 'sonner';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ const Login = () => {
       const response = await api.post('/auth/login', formData);
       const { user, token } = response.data;
       dispatch(setUser({ user, token }));
+      toast.success("Login successful!");
 
       if (user.role === 'admin') {
         navigate('/admin-Dashboard');
@@ -29,7 +31,7 @@ const Login = () => {
         navigate('/employee-Dashboard');
       }
     } catch (error) {
-      alert("Login failed");
+      toast.error("Login failed");
       console.log(error);
     }
   }

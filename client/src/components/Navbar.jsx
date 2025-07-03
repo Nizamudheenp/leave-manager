@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserIcon, ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/solid';
+import { toast } from 'sonner';
 
 
 const Navbar = () => {
@@ -12,6 +13,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        toast("Logged out");
         navigate('/login');
     };
 
