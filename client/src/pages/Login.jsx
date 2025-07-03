@@ -18,23 +18,34 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { email, password } = formData;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     try {
       const response = await api.post('/auth/login', formData);
       const { user, token } = response.data;
       dispatch(setUser({ user, token }));
       toast.success("Login successful!");
 
-      if (user.role === 'admin') {
-        navigate('/admin-Dashboard');
-      }
-      if (user.role === 'user') {
-        navigate('/employee-Dashboard');
-      }
+      if (user.role === 'admin') navigate('/admin-Dashboard');
+      else navigate('/employee-Dashboard');
     } catch (error) {
-      toast.error("Login failed");
+      toast.error(error.response?.data?.message || "Login failed");
       console.log(error);
     }
-  }
+  };
+
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-300'>
